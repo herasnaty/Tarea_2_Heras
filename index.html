@@ -1,0 +1,219 @@
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, inital-scale=1.0">
+<title>Mi primer mapa en Openlayers</title>
+<link rel="stylesheet" href ="./libs/v6.0.0-dist/ol.css">
+<script src="https://openlayers.org/en/v6.5.0/build/ol.js" type="text/javascript"></script>
+<style> 
+
+
+* {
+	box-sizing: border-box
+}
+
+body {
+	margin: 0;
+	padding:0;
+}
+.map{
+	height: 100vh;
+	width: 100vw;	
+}
+body{
+	Background-color:lightblue;
+}
+h1{
+	color: red;
+	text-align: center;	
+}
+
+p{
+	font-family: verdana;
+	font-size: 20px;
+	}
+#boton{
+	color:red
+	}
+
+
+
+</style>
+
+
+
+</head>
+<body>
+
+<script>
+window.onload = init;
+function init(){
+	const map = new ol.Map({	
+		view: new ol.View ({
+			center: ol.proj.transform([-78.4800,-0.1480], 'EPSG:4326', 'EPSG:3857' ),
+			zoom: 13.9,
+			minZoom: 10
+			
+		}),
+		layers: [
+			new ol.layer.Tile({
+				source: new ol.source.OSM()
+			})
+		],
+		target:"js-map"
+	})
+	
+	const ortoIGM = new ol.layer.Tile({
+		source: new ol.source.TileWMS({
+			url:"https://www.geoportaligm.gob.ec/orto/wms?",
+			params:{
+				LAYERS: "quito 2019",
+				FORMAT:"image/png",
+				TRANSPARENT: true
+			},
+			attributions: '<a href=https://www.geoportaligm.gob.ec/portal/index.php/descarga-de-servicios-wms-del-igm/>IGM</a>'
+			
+			
+			
+		})
+	})
+	map.addLayer(ortoIGM);
+	
+		const turismoDMQ = new ol.layer.Tile({
+		source: new ol.source.TileWMS({
+			url:"https://geoserver.idesinde.com:8443/geoserver/ows?",
+			params:{
+				LAYERS: "ruta_turismo_l",
+				FORMAT:"image/png",
+				TRANSPARENT: true
+			},
+			attributions: '<a href=https://www.geoportaligm.gob.ec/portal/index.php/descarga-de-servicios-wms-del-igm/>IGM</a>'
+			
+			
+			
+		})
+	})
+	map.addLayer(turismoDMQ);	
+	
+	const UbicacionZon = new ol.layer.Tile({
+		source: new ol.source.TileWMS({
+			url:"https://geoserver.idesinde.com:8443/geoserver/ows?",
+			params:{
+				LAYERS: "BB006_AdministracionesZonales_P",
+				FORMAT:"image/png",
+				TRANSPARENT: true
+			},
+			attributions: '<a href=https://www.geoportaligm.gob.ec/portal/index.php/descarga-de-servicios-wms-del-igm/>IGM</a>'
+			
+			
+			
+		})
+	})
+	map.addLayer(UbicacionZon);
+	
+	const ADMZon = new ol.layer.Tile({
+		source: new ol.source.TileWMS({
+			url:"https://geoserver.idesinde.com:8443/geoserver/ows?",
+			params:{
+				LAYERS: "adm_zonal_2024_a",
+				FORMAT:"image/png",
+				TRANSPARENT: true
+			},
+			attributions: '<a href=https://www.geoportaligm.gob.ec/portal/index.php/descarga-de-servicios-wms-del-igm/>IGM</a>'
+			
+			
+			
+		})
+	})
+	map.addLayer(ADMZon);
+	
+}
+
+</script>
+
+
+
+
+<strong><center><H1>Mi primer mapa en Openlayers</H1></strong></center>
+ <h1>Modulo 14: Arquitectura Web en Servicios</h1>
+<strong><center><h2> Tarea 2</h2></center></strong>
+<strong><center><h3> Natalia Heras </h1></center></strong>
+<br>
+<div id="js-map" class="map" ></div>
+
+<br><br>
+
+<body>
+
+<script>
+function visualizarAZDMQ(){
+
+var capa = prompt("Si desea visualizar una capa, introduzca alguna de las siguientes opciones, ejemplos: Heras:BB006_AdministracionesZonales_P, Heras:adm_zonal_2024_a, Heras:ruta_turismo_l" )
+//var ancho = prompt("Indique el valor de ancho de la imagen", "7688")
+//var alto= prompt("Indique el valor de alto de la imagen", "530")
+
+
+var enlace = "https://geoserver.idesinde.com:8443/geoserver/Heras/wms?service=WMS&version=1.1.0&request=GetMap&layers=Heras%3Aadm_zonal_2024_a,Heras%3Aruta_turismo_l,Heras%3ABB006_AdministracionesZonales_P&bbox=-78.94768622805215%2C-0.5906094079524464%2C-78.1651039797908%2C0.2773138229627558&width=692&height=768&srs=EPSG%3A4326&styles=&format=image%2Fjpeg"
+
+document.getElementById("visual").href= enlace
+document.getElementById("visual").src= enlace
+
+}
+
+
+function desplegablecapas() {
+
+var capasDMQ = document.getElementById("desplegablecapas").value
+var formato = document.getElementById("formatos").value
+
+var enlacecapas = "https://geoserver.idesinde.com:8443/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&typeName="+capasDMQ+"&outputformat="+formato
+//var enlacecapas ="https://geoserver.idesinde.com:8443/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&typeName=Heras%3Aadm_zonal_2024_a,Heras%3Aruta_turismo_l,Heras%3ABB006_AdministracionesZonales_P+"&outputformat="+formato 
+
+document.getElementById("descargacapas").href= enlacecapas
+}
+
+</script>
+
+
+
+ <h1>Modulo 14: Arquitectura Web en Servicios</h1>
+<strong><center><h2> Tarea 1</h2></center></strong>
+<strong><center><h3> Natalia Heras </h1></center></strong>
+<br>
+<center><img src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBdrObCFT1S-3JZwhZXDJQ8lO78v1lq2YeGw&s" alt="Municipio del Distrito Metropolitano de Quito"></center>
+
+<br>
+<strong><center><h2> 1. Herramienta para visualizar la información de Administraciones Zonales del Distrito Metropolitano de Quito</h2></strong></center>
+<strong><center><button type="button" onclick ="visualizarAZDMQ()" style="width:400;height:100; text-size:100px">Visualizar información Administraciones Zonales</button></strong></center>
+<br><br><br><br><br>
+
+<strong><center><img id="visual" src=""></strong></center>
+<br><br><br>
+
+
+
+<strong><center><h2> 2. Herramienta para descargar la información de Rutas Turísticas en Administraciones Zonales</h2></strong></center>
+<strong><center><select id="desplegablecapas" onchange="desplegablecapas()" >
+<option value="Heras:BB006_AdministracionesZonales_P">Administraciones Zonales DMQ
+<option value="Heras:adm_zonal_2024_a">Ubicación AZ DMQ
+<option value="Heras:ruta_turismo_l">Rutas Turísticas
+
+</select></strong></center>
+<br><br>
+<strong><center><select id="formatos" onchange="desplegablecapas()" >
+<option value="shape-zip">Shapefile
+<option value="GML2">GML
+<option value="KML">KML
+
+</select></strong></center>
+
+
+
+<br><br><br>
+<strong><center><a id="descargacapas" href="" >Descargue aquí</a></strong></center>
+<br>
+
+
+</body>
+</html>
